@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=400">
+  <title>Leak Guard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="lg-app" id="app">
+    <header class="lg-header">
+      <div class="lg-logo">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div>
+          <h1 class="lg-title">Leak Guard</h1>
+          <span class="lg-version">v1.0.0</span>
+        </div>
+      </div>
+      <div class="lg-header-actions">
+        <button class="lg-icon-btn" id="themeToggle" title="Toggle theme">
+          <svg id="themeIcon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+        <button class="lg-icon-btn" id="settingsBtn" title="Settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <nav class="lg-tabs">
+      <button class="lg-tab active" data-tab="check">Check</button>
+      <button class="lg-tab" data-tab="audit">Audit</button>
+      <button class="lg-tab" data-tab="history">History</button>
+      <button class="lg-tab" data-tab="generator">Generator</button>
+      <button class="lg-tab" data-tab="news">News</button>
+    </nav>
+
+    <!-- CHECK TAB -->
+    <section class="lg-panel active" id="panel-check">
+      <div class="lg-card">
+        <h2 class="lg-card-title">Check a Password</h2>
+        <p class="lg-card-desc">Enter a password to check against known data breaches using privacy-preserving k-anonymity.</p>
+        <div class="lg-input-group">
+          <input type="password" id="checkInput" class="lg-input" placeholder="Enter password to check..." autocomplete="off">
+          <button class="lg-btn-icon" id="toggleCheckVisibility" title="Show/hide password">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <button class="lg-btn lg-btn-primary lg-full" id="checkBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          Check for Breaches
+        </button>
+        <div id="checkResult" class="lg-result" style="display:none"></div>
+        <div id="strengthDisplay" class="lg-strength-display" style="display:none"></div>
+      </div>
+
+      <div class="lg-card">
+        <h2 class="lg-card-title">Quick Audit</h2>
+        <p class="lg-card-desc">Scan your saved password history for weak, reused, or breached passwords.</p>
+        <button class="lg-btn lg-btn-secondary lg-full" id="quickAuditBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Run Quick Audit
+        </button>
+      </div>
+
+      <div class="lg-card">
+        <h2 class="lg-card-title">Statistics</h2>
+        <div class="lg-stats-grid" id="statsGrid">
+          <div class="lg-stat">
+            <span class="lg-stat-value" id="statChecked">0</span>
+            <span class="lg-stat-label">Checked</span>
+          </div>
+          <div class="lg-stat">
+            <span class="lg-stat-value lg-stat-danger" id="statBreaches">0</span>
+            <span class="lg-stat-label">Breaches</span>
+          </div>
+          <div class="lg-stat">
+            <span class="lg-stat-value" id="statLastCheck">Never</span>
+            <span class="lg-stat-label">Last Check</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUDIT TAB -->
+    <section class="lg-panel" id="panel-audit">
+      <div class="lg-card">
+        <h2 class="lg-card-title">Password Audit</h2>
+        <p class="lg-card-desc">Enter multiple passwords (one per line) to audit them for weaknesses, reuse, and breaches.</p>
+        <textarea id="auditInput" class="lg-textarea" placeholder="Enter passwords, one per line...&#10;password123&#10;MyP@ssw0rd&#10;SecretKey!2024" rows="6"></textarea>
+        <button class="lg-btn lg-btn-primary lg-full" id="runAuditBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/>
+          </svg>
+          Run Full Audit
+        </button>
+      </div>
+      <div id="auditResults" class="lg-audit-results" style="display:none"></div>
+    </section>
+
+    <!-- HISTORY TAB -->
+    <section class="lg-panel" id="panel-history">
+      <div class="lg-card">
+        <div class="lg-card-header-row">
+          <h2 class="lg-card-title">Breach History</h2>
+          <button class="lg-btn-sm lg-btn-danger" id="clearHistoryBtn">Clear All</button>
+        </div>
+        <p class="lg-card-desc">Previously checked passwords (stored as irreversible hashes only).</p>
+        <div id="historyList" class="lg-history-list">
+          <div class="lg-empty-state">No passwords checked yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GENERATOR TAB -->
+    <section class="lg-panel" id="panel-generator">
+      <div class="lg-card">
+        <h2 class="lg-card-title">Secure Password Generator</h2>
+        <p class="lg-card-desc">Generate cryptographically secure passwords.</p>
+        <div class="lg-gen-options">
+          <div class="lg-gen-row">
+            <label class="lg-label">Length: <strong id="genLengthVal">20</strong></label>
+            <input type="range" id="genLength" min="8" max="64" value="20" class="lg-range">
+          </div>
+          <div class="lg-gen-row">
+            <label class="lg-toggle-label">
+              <input type="checkbox" id="genUpper" checked> Uppercase (A-Z)
+            </label>
+            <label class="lg-toggle-label">
+              <input type="checkbox" id="genLower" checked> Lowercase (a-z)
+            </label>
+          </div>
+          <div class="lg-gen-row">
+            <label class="lg-toggle-label">
+              <input type="checkbox" id="genDigits" checked> Numbers (0-9)
+            </label>
+            <label class="lg-toggle-label">
+              <input type="checkbox" id="genSymbols" checked> Symbols (!@#$...)
+            </label>
+          </div>
+        </div>
+        <div class="lg-gen-output">
+          <input type="text" id="genOutput" class="lg-input lg-mono" readonly>
+          <button class="lg-btn-icon" id="genCopyBtn" title="Copy to clipboard">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
+        <div id="genStrength" class="lg-strength-display" style="display:none"></div>
+        <button class="lg-btn lg-btn-primary lg-full" id="genGenerateBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          Generate Password
+        </button>
+      </div>
+    </section>
+
+    <!-- NEWS TAB -->
+    <section class="lg-panel" id="panel-news">
+      <div class="lg-card">
+        <h2 class="lg-card-title">Recent Breaches</h2>
+        <p class="lg-card-desc">Latest notable data breaches from Have I Been Pwned.</p>
+        <div id="newsFeed" class="lg-news-feed">
+          <div class="lg-loading">Loading latest breaches...</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS PANEL -->
+    <section class="lg-panel" id="panel-settings" style="display:none">
+      <div class="lg-card">
+        <h2 class="lg-card-title">Settings</h2>
+        <div class="lg-settings-list">
+          <label class="lg-setting">
+            <div>
+              <div class="lg-setting-title">Auto-check passwords</div>
+              <div class="lg-setting-desc">Automatically check passwords when you type them</div>
+            </div>
+            <input type="checkbox" id="settingAutoCheck" class="lg-checkbox">
+          </label>
+          <label class="lg-setting">
+            <div>
+              <div class="lg-setting-title">Breach notifications</div>
+              <div class="lg-setting-desc">Show desktop notifications when a breach is found</div>
+            </div>
+            <input type="checkbox" id="settingNotifications" class="lg-checkbox">
+          </label>
+          <label class="lg-setting">
+            <div>
+              <div class="lg-setting-title">Check on save</div>
+              <div class="lg-setting-desc">Check passwords when saving login forms</div>
+            </div>
+            <input type="checkbox" id="settingCheckOnSave" class="lg-checkbox">
+          </label>
+          <div class="lg-setting">
+            <div>
+              <div class="lg-setting-title">Theme</div>
+              <div class="lg-setting-desc">Choose light or dark theme</div>
+            </div>
+            <select id="settingTheme" class="lg-select">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+          <div class="lg-setting">
+            <div>
+              <div class="lg-setting-title">Check interval</div>
+              <div class="lg-setting-desc">Hours between periodic breach checks</div>
+            </div>
+            <select id="settingInterval" class="lg-select">
+              <option value="6">Every 6 hours</option>
+              <option value="12">Every 12 hours</option>
+              <option value="24">Every 24 hours</option>
+              <option value="48">Every 48 hours</option>
+              <option value="168">Weekly</option>
+            </select>
+          </div>
+        </div>
+        <button class="lg-btn lg-btn-primary lg-full" id="saveSettingsBtn" style="margin-top:12px">
+          Save Settings
+        </button>
+      </div>
+      <div class="lg-card">
+        <h2 class="lg-card-title">About</h2>
+        <div class="lg-about">
+          <p><strong>Leak Guard</strong> v1.0.0</p>
+          <p>Privacy-preserving password breach checker using k-anonymity.</p>
+          <p class="lg-about-note">Your passwords are never sent to any server. Only the first 5 characters of a SHA-1 hash are transmitted.</p>
+          <p class="lg-about-note">Powered by <a href="https://haveibeenpwned.com/Passwords" target="_blank">Have I Been Pwned</a> API.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="password-checker.js"></script>
+  <script src="audit.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

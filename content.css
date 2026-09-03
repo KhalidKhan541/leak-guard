@@ -1,0 +1,183 @@
+.leak-guard-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: #fff;
+  padding: 12px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: leak-guard-slide-down 0.3s ease-out;
+}
+
+@keyframes leak-guard-slide-down {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.leak-guard-banner-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.leak-guard-banner-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.leak-guard-banner-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.leak-guard-banner-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.leak-guard-strength-indicator {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  pointer-events: none;
+  z-index: 10000;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.leak-guard-strength-weak {
+  background: #dc3545;
+  color: #fff;
+}
+
+.leak-guard-strength-fair {
+  background: #ffc107;
+  color: #212529;
+}
+
+.leak-guard-strength-good {
+  background: #28a745;
+  color: #fff;
+}
+
+.leak-guard-strength-strong {
+  background: #007bff;
+  color: #fff;
+}
+
+.leak-guard-strength-bar {
+  position: absolute;
+  right: 8px;
+  bottom: -18px;
+  width: 60px;
+  height: 4px;
+  border-radius: 2px;
+  background: #e9ecef;
+  overflow: hidden;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.leak-guard-strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s, background 0.3s;
+}
+
+.leak-guard-generate-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  z-index: 10000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.leak-guard-generate-btn:hover {
+  background: #0056b3;
+}
+
+.leak-guard-generate-btn.copied {
+  background: #28a745;
+}
+
+.leak-guard-breach-notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483647;
+  background: #fff;
+  border: 2px solid #dc3545;
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 340px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  animation: leak-guard-fade-in 0.3s ease-out;
+}
+
+@keyframes leak-guard-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.leak-guard-notif-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #dc3545;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.leak-guard-notif-text {
+  font-size: 13px;
+  color: #495057;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.leak-guard-notif-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+  line-height: 1;
+}
+
+.leak-guard-notif-close:hover {
+  color: #333;
+}
